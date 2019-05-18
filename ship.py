@@ -11,6 +11,7 @@ class Ship:
         """load ship and get rect"""
 
         self.image = pygame.image.load('images/ship.png')
+        self.image = pygame.transform.scale(self.image, (ai_settings.ship_width, ai_settings.ship_height))
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
 
