@@ -6,7 +6,7 @@ class Alien(Sprite):
     # One alien class
 
     def __init__(self, ai_settings, screen):
-        # Init alien and setup start position
+        """ Init alien and setup start position """
 
         super(Alien, self).__init__()
         self.screen = screen
@@ -26,7 +26,7 @@ class Alien(Sprite):
         self.x = float(self.rect.x)
 
     def blitme(self):
-        # output alien in current location
+        """ output alien in current location """
         self.screen.blit(self.image, self.rect)
 
     def update(self):

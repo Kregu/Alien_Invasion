@@ -22,9 +22,9 @@ class Settings:
 
 
         # alien
-        self.alien_width = 48
-        self.alien_height = 48
-        self.alien_speed_factor = 1
+        self.alien_width = 36
+        self.alien_height = 36
+        self.alien_speed_factor = 0.5
         self.fleet_drop_speed = 10
 
         # fleet_direction: 1 = right, -1 = left
