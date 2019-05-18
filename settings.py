@@ -20,7 +20,6 @@ class Settings:
         self.bullet_color = 255, 0, 0
         self.bullets_allowed = 15
 
-
         # alien
         self.alien_width = 36
         self.alien_height = 36
@@ -29,10 +28,3 @@ class Settings:
 
         # fleet_direction: 1 = right, -1 = left
         self.fleet_direction = 1
-
-
-
-
-
-
-
