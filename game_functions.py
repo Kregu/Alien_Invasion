@@ -38,6 +38,8 @@ def start_game(ai_settings, screen, stats, ship, aliens, bullets):
     if not stats.game_active:
         # hide mouse
         pygame.mouse.set_visible(False)
+        # reset game settings
+        ai_settings.initialize_dynamic_settings()
         # reset game statistics
         stats.reset_stats()
         stats.game_active = True
@@ -54,12 +56,12 @@ def start_game(ai_settings, screen, stats, ship, aliens, bullets):
 def check_keydown_events(event, ai_settings, screen, stats, ship, aliens, bullets, file2):
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
+
     elif event.key == pygame.K_LEFT:
         ship.moving_left = True
 
     elif event.key == pygame.K_SPACE:
-        winsound.PlaySound(file2, winsound.SND_ASYNC)
-        fire_bullet(ai_settings, screen, ship, bullets)
+        fire_bullet(ai_settings, screen, stats, ship, bullets, file2)
 
     elif event.key == pygame.K_q:
         sys.exit()
@@ -117,13 +119,15 @@ def check_bullet_allien_collisions(ai_settings, screen, ship, aliens, bullets):
     if len(aliens) == 0:
         # remove all bullets and create new fleet
         bullets.empty()
+        ai_settings.increase_speed()
         create_fleet(ai_settings, screen, ship, aliens)
 
 
-def fire_bullet(ai_settings, screen, ship, bullets):
+def fire_bullet(ai_settings, screen, stats, ship, bullets, file2):
     ''' fire bullet if max bullet is not reach'''
     # create new bullet and insert it to group bullets
-    if len(bullets) < ai_settings.bullets_allowed:
+    if len(bullets) < ai_settings.bullets_allowed and stats.game_active:
+        play_sound(file2)
         new_bullet = Bullet(ai_settings, screen, ship)
         bullets.add(new_bullet)
 
@@ -156,7 +160,7 @@ def create_alien(ai_settings, screen, aliens, alien_number, row_number):
     alien_height = alien.rect.height
     alien.x = alien_width + 2 * alien_width * alien_number
     alien.rect.x = alien.x
-    alien.rect.y = alien_height + 2 * alien_height * row_number
+    alien.rect.y = alien_height + 1.4 * alien_height * row_number
     aliens.add(alien)
 
 
@@ -220,3 +224,7 @@ def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
             # same as ship hit
             ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
             break
+
+def play_sound(sound_file):
+    """ play any sound """
+    winsound.PlaySound(sound_file, winsound.SND_ASYNC)

@@ -41,7 +41,8 @@ def run_game():
     # music
     file1 = "music/240376__edtijo__happy-8bit-pixel-adenture.wav"
     file2 = "music/151022__bubaproducer__laser-shot-silenced.wav"
-    winsound.PlaySound(file1, winsound.SND_ASYNC)
+
+    gf.play_sound(file1)
 
 
     # RUN GAME
