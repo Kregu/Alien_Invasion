@@ -1,5 +1,4 @@
 import pygame
-import winsound
 
 from settings import Settings
 from pygame.sprite import Group
@@ -8,7 +7,6 @@ from ship import Ship
 from button import Button
 
 import game_functions as gf
-#from alien import Alien
 
 
 def run_game():
