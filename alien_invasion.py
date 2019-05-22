@@ -5,6 +5,7 @@ from pygame.sprite import Group
 from game_stats import GameStats
 from ship import Ship
 from button import Button
+from scoreboard import Scoreboard
 
 import game_functions as gf
 
@@ -42,15 +43,19 @@ def run_game():
 
     gf.play_sound(file1)
 
+    # create instances of GameStats and Scoreboard
+    stats = GameStats(ai_settings)
+    sb = Scoreboard(ai_settings, screen, stats)
+
 
     # RUN GAME
     while True:
         gf.check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets, file2)
         if stats.game_active:
             ship.update()
-            gf.update_bullets(ai_settings, screen, ship, aliens, bullets)
+            gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets)
             gf.update_aliens(ai_settings, stats, screen, ship, aliens, bullets)
-        gf.update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button)
+        gf.update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button)
 
 
 run_game()

@@ -10,7 +10,7 @@ class Scoreboard():
         self.stats = stats
 
         # set font for displaying information
-        self.text_color = (30, 30, 30)
+        self.text_color = (255, 255, 255)
         self.font = pygame.font.SysFont(None, 48)
 
         # create original screen
@@ -18,10 +18,18 @@ class Scoreboard():
 
     def prep_score(self):
         # convert score to graphic image
-        score_str =  str(self.stats.score)
+        rounded_score = round(self.stats.score, -1)
+
+        #score_str =  str(self.stats.score)
+        score_str = "{:,}".format(rounded_score)
         self.score_image = self.font.render(score_str, True, self.text_color, self.ai_settings.bg_color)
 
         # display score image on top right screen
         self.score_rect = self.score_image.get_rect()
-        self.score_rect.right = self.screen_rect - 20
-        self.score_image.top = 20
+        self.score_rect.right = self.screen_rect.right - 20
+        self.score_rect.top = 20
+
+    def show_score(self):
+        """ display score on screen """
+        self.screen.blit(self.score_image, self.score_rect)
+
