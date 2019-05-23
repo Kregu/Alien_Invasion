@@ -8,34 +8,35 @@ from alien import Alien
 
 # file2 = "music/151022__bubaproducer__laser-shot-silenced.wav"
 
-def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets, file2):
+def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, file2):
     """process key down and mouse events"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
 
         if event.type == pygame.KEYDOWN:
-            check_keydown_events(event, ai_settings, screen, stats, ship, aliens, bullets, file2)
+            check_keydown_events(event, ai_settings, screen, stats, sb, ship, aliens, bullets, file2)
 
         if event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y)
+            check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x, mouse_y)
 
 
-def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y):
+def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x, mouse_y):
     """ run new game when by click on play button """
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if button_clicked:
         # start new game
-        start_game(ai_settings, screen, stats, ship, aliens, bullets)
+        start_game(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
 
-def start_game(ai_settings, screen, stats, ship, aliens, bullets):
+def start_game(ai_settings, screen, stats, sb, ship, aliens, bullets):
     """ start new game"""
     if not stats.game_active:
+
         # hide mouse
         pygame.mouse.set_visible(False)
         # reset game settings
@@ -43,6 +44,11 @@ def start_game(ai_settings, screen, stats, ship, aliens, bullets):
         # reset game statistics
         stats.reset_stats()
         stats.game_active = True
+
+        # reset scores and level images
+        sb.prep_score()
+        sb.prep_high_score()
+        sb.prep_level()
 
         # clear aliens and bullets
         aliens.empty()
@@ -53,7 +59,8 @@ def start_game(ai_settings, screen, stats, ship, aliens, bullets):
         ship.center_ship()
 
 
-def check_keydown_events(event, ai_settings, screen, stats, ship, aliens, bullets, file2):
+
+def check_keydown_events(event, ai_settings, screen, stats, sb, ship, aliens, bullets, file2):
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
 
@@ -67,7 +74,7 @@ def check_keydown_events(event, ai_settings, screen, stats, ship, aliens, bullet
         sys.exit()
 
     elif event.key == pygame.K_p:
-        start_game(ai_settings, screen, stats, ship, aliens, bullets)
+        start_game(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
 
 def check_keyup_events(event, ship):
@@ -119,17 +126,22 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
     # check bullets hit the aliens.
     # when collisions remove bullets and aliens
 
-    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+    collisions = pygame.sprite.groupcollide(bullets, aliens, False, True)
     if collisions:
         for aliens in collisions.values():
             stats.score += ai_settings.alien_points * len(aliens)
         sb.prep_score()
+        check_high_score(stats, sb)
+
 
     if len(aliens) == 0:
-        # remove all bullets and create new fleet
+        # if all aliens are destroyed, remove all bullets and create new fleet and start new level
         bullets.empty()
         ai_settings.increase_speed()
         create_fleet(ai_settings, screen, ship, aliens)
+        # level up
+        stats.level += 1
+        sb.prep_level()
 
 
 def fire_bullet(ai_settings, screen, stats, ship, bullets, file2):
@@ -237,3 +249,12 @@ def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
 def play_sound(sound_file):
     """ play any sound """
     winsound.PlaySound(sound_file, winsound.SND_ASYNC)
+
+def check_high_score(stats, sb):
+    """ check new record score """
+    if stats.score > stats.high_score:
+        stats.high_score = stats.score
+        sb.prep_high_score()
+
+
+
