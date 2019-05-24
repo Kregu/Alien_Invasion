@@ -11,18 +11,18 @@ class Settings:
         # ship parameters
         self.ship_width = 48
         self.ship_height = 48
-        self.ship_limit = 2
+        self.ship_limit = 3
 
         # bullets
-        self.bullet_width = 333
+        self.bullet_width = 3
         self.bullet_height = 15
         self.bullet_color = 255, 0, 0
-        self.bullets_allowed = 10
+        self.bullets_allowed = 5
 
         # alien
-        self.alien_width = 40
-        self.alien_height = 40
-        self.fleet_drop_speed = 100
+        self.alien_width = 48
+        self.alien_height = 48
+        self.fleet_drop_speed = 10
 
         # increase game speed
         self.speedup_scale = 1.1
