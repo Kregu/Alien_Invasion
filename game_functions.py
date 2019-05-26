@@ -1,21 +1,22 @@
 import sys
 import pygame
 import winsound
+import json
 from time import sleep
 from bullet import Bullet
 from alien import Alien
 
 
-# file2 = "music/151022__bubaproducer__laser-shot-silenced.wav"
 
-def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, file2):
+def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, file2, file3):
     """process key down and mouse events"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            save_result(stats, file3)
             sys.exit()
 
         if event.type == pygame.KEYDOWN:
-            check_keydown_events(event, ai_settings, screen, stats, sb, ship, aliens, bullets, file2)
+            check_keydown_events(event, ai_settings, screen, stats, sb, ship, aliens, bullets, file2, file3)
 
         if event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
@@ -61,7 +62,7 @@ def start_game(ai_settings, screen, stats, sb, ship, aliens, bullets):
 
 
 
-def check_keydown_events(event, ai_settings, screen, stats, sb, ship, aliens, bullets, file2):
+def check_keydown_events(event, ai_settings, screen, stats, sb, ship, aliens, bullets, file2, file3):
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
 
@@ -72,6 +73,7 @@ def check_keydown_events(event, ai_settings, screen, stats, sb, ship, aliens, bu
         fire_bullet(ai_settings, screen, stats, ship, bullets, file2)
 
     elif event.key == pygame.K_q:
+        save_result(stats, file3)
         sys.exit()
 
     elif event.key == pygame.K_p:
@@ -182,7 +184,7 @@ def create_alien(ai_settings, screen, aliens, alien_number, row_number):
     alien_height = alien.rect.height
     alien.x = alien_width + 2 * alien_width * alien_number
     alien.rect.x = alien.x
-    alien.rect.y = alien_height + 1.4 * alien_height * row_number
+    alien.rect.y = alien_height + 1.4 * alien_height * row_number + 10
     aliens.add(alien)
 
 
@@ -256,6 +258,24 @@ def check_high_score(stats, sb):
     if stats.score > stats.high_score:
         stats.high_score = stats.score
         sb.prep_high_score()
+
+def save_result(stats, file3):
+    file_result = open(file3, mode='w')
+    json.dump(stats.high_score, file_result)
+    file_result.close()
+
+def load_result(file3):
+    try:
+        file_result = open(file3, mode='r')
+    except FileNotFoundError:
+        print("File with previous result is not found.")
+        return 0
+    else:
+        return json.load(file_result)
+
+
+
+
 
 
 

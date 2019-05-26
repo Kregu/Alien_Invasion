@@ -41,16 +41,21 @@ def run_game():
     file1 = "music/240376__edtijo__happy-8bit-pixel-adenture.wav"
     file2 = "music/151022__bubaproducer__laser-shot-silenced.wav"
 
+    # result
+    file3 = "result.txt"
+
     gf.play_sound(file1)
+
+
 
     # create instances of GameStats and Scoreboard
     stats = GameStats(ai_settings)
+    stats.high_score = gf.load_result(file3)
     sb = Scoreboard(ai_settings, screen, stats)
-
 
     # RUN GAME
     while True:
-        gf.check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, file2)
+        gf.check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, file2, file3)
         if stats.game_active:
             ship.update()
             gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets)
