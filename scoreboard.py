@@ -2,6 +2,7 @@ import pygame.font
 from pygame.sprite import Group
 from ship import Ship
 
+
 class Scoreboard():
     """ class for output game information's """
     def __init__(self, ai_settings, screen, stats):
@@ -60,8 +61,6 @@ class Scoreboard():
             ship.rect.x = 10 + ship_number * ship.rect.width
             ship.rect.y = 10
             self.ships.add(ship)
-
-
 
     def show_score(self):
         """ display score on screen """
